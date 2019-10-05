@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+          {% block content %}
+            <a href="{{ applink }}"><b>{{ applinktext }}</b></a>
+                <br>
+            <img src="{{ url_for('static', filename='otw.png') }}" alt="Another World">
+          {% endblock %}

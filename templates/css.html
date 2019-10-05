@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+        <style>
+            {{ css }}
+        </style>
+                <div class="btt">
+                <button class="inputc" type="button" id="getcss" style="width: auto;visibility: hidden; margin-bottom: 5px;">Download your
+                    static page with the following CSS content</button>
+                    </div>
+                <div class="grid-container">
+                {% for pixelv in pixel %}
+                    <div class="grid-item" style="background-color: rgba{{ pixelv }};"></div>
+                {% endfor %}
+                </div>
+        <script type="text/javascript">
+        btt = document.getElementById("getcss");
+        btt.style.visibility = "visible";
+        document.getElementById("getcss").onclick = function () {
+            location.href = "output/{{ filename }}";
+        };
+</script>
+
+{% endblock %}
