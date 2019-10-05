@@ -37,8 +37,7 @@ def transimg(path, filename, key, xsize, ysize, pixsize, grid, maxxy):
     css3 = """
       padding: """
     padding = pixsize
-    css4 = """px;
-      font-size: 1px;
+    css4 = """px;      
       text-align: center;
     }
 .grid-container {
