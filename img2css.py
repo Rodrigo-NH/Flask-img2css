@@ -12,17 +12,17 @@ wpath = os.path.dirname(os.path.abspath(__file__))
 
 def touchfolders():
     try:
-        upfolder = wpath + "/uploads"
-        os.mkdir(upfolder)
+        folder = wpath + "/uploads"
+        os.mkdir(folder)
     except:
         pass
     try:
-        upfolder = wpath + "/output"
-        os.mkdir(upfolder)
+        folder = wpath + "/output"
+        os.mkdir(folder)
     except:
         pass
 
-APP_ROOT = '/' #  '/' or /img2css/' or '/anything'
+APP_WEB_ROOT = '/' #  '/' or /img2css/' or '/anything/'
 APP_FOLDERS = wpath
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 ANOTHER_LINK = 'https://github.com/Rodrigo-NH/Flask-img2css'
@@ -30,19 +30,19 @@ ANOTHER_LINK_TEXT = 'Source code'
 MAX_OUTPUT_SIZE = '200' # Max CSS 'image' output X & Y
 touchfolders();
 
-app = Flask(__name__, static_url_path=None)
+app = Flask(__name__, static_url_path = APP_WEB_ROOT + 'static/img2css', static_folder='static/img2css')
 app.secret_key = b'Your_Secret_Key_Here(Change_Me)'
 app.config['APP_FOLDERS'] = APP_FOLDERS
-app.config['APP_ROOT'] = APP_ROOT
+app.config['APP_WEB_ROOT'] = APP_WEB_ROOT
 app.config['ANOTHER_LINK'] = ANOTHER_LINK
 app.config['ANOTHER_LINK_TEXT'] = ANOTHER_LINK_TEXT
 app.config['MAX_OUTPUT_SIZE'] = MAX_OUTPUT_SIZE
 
-@app.route(app.config['APP_ROOT']+'css')
+@app.route(app.config['APP_WEB_ROOT']+'css')
 def css():
     return render_template('css.html')
 
-@app.route(app.config['APP_ROOT']+'output/<filename>')
+@app.route(app.config['APP_WEB_ROOT']+'output/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['APP_FOLDERS'] + '/output',
                                filename, as_attachment=True, attachment_filename="static_page.zip")
@@ -52,7 +52,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route(app.config['APP_ROOT'], methods=['GET', 'POST'])
+@app.route(app.config['APP_WEB_ROOT'], methods=['GET', 'POST'])
 def home():
     if session.get('key') is None:
         skey = str(int(time.time()))+"-"+str(random.randint(0,99999)) #not too secure
@@ -75,7 +75,7 @@ def home():
                 filename = session.get('key')+".zip"
                 return render_template('css.html', css=webdata[0],
                                           pixel=webdata[1],
-                                          siteroot=app.config['APP_ROOT'],
+                                          siteroot=app.config['APP_WEB_ROOT'],
                                           filename = filename,
                                        suggx=int(int(app.config['MAX_OUTPUT_SIZE'])/2),
                                        sugg43=int(int(int(app.config['MAX_OUTPUT_SIZE'])/2)
